@@ -110,13 +110,42 @@ function processSubwayStatuses(subwayStatuses) {
   const formattedStatuses = [];
 
   subwayStatuses.forEach(subwayStatus => {
+    if (subwayStatus.name === "SIR") return;
     const formattedStatus = {};
-    formattedStatus.lines = subwayStatus.name;
+    formattedStatus.color = subwayColors(subwayStatus.name);
+    formattedStatus.lines = subwayStatus.name.split('');
     formattedStatus.status = subwayStatus.status;
     formattedStatuses.push(formattedStatus);
   })
 
   return formattedStatuses;
+}
+
+function subwayColors(subwayLine) {
+  switch (subwayLine) {
+    case "123":
+      return '#EE352E'
+    case "456":
+      return '#00933C'
+    case "7":
+      return '#B933AD'
+    case "ACE":
+      return '#0039A6'
+    case "BDFM":
+      return '#FF6319'
+    case "G":
+      return '#6CBE45'
+    case "JZ":
+      return '#996633'
+    case "L":
+      return '#A7A9AC'
+    case "NQR":
+      return '#FCCC0A'
+    case "S":
+      return '#808183'
+    default:
+      break;
+  }
 }
 
 function processBusTimes(busTimes) {
