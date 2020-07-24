@@ -7,6 +7,7 @@ const port = process.env.PORT;
 const axios = require('axios');
 const { createClient } = require('mta-realtime-subway-departures');
 const Mta = require('mta-gtfs');
+const moment = require('moment'); 
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -14,14 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.send(`Hi! Server is listening on port ${port}`);
-});
-
-app.get('/weather', (req, res) => {
-  getWeather().then(response => {
-    res.send(response.data);
-  }).catch(error => {
-    console.log(error);
-  })
 });
 
 app.get('/transit', (req, res) => {
@@ -59,14 +52,32 @@ app.get('/mtaStatus', (req, res) => {
   })
 })
 
-async function getWeather() {
-  try {
-    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&appid=${process.env.OPENWEATHER_KEY}&units=imperial`;
-    const response = await axios.get(url);
-    
-    return response;
-  } catch(error) {
+app.get('/weatherNow', (req, res) => {
+  getWeatherNow().then(response => {
+    res.send(response);
+  }).catch(error => {
     console.log(error);
+  })
+})
+
+app.get('/weatherHourly', (req, res) => {
+  getWeatherHourly().then(response => {
+    res.send(response);
+  }).catch(error => {
+    console.log(error);
+  })
+})
+
+
+async function getWeatherHourly() {
+  try {
+    const eightHrsFromNow = moment().add(8, 'h').toISOString();
+    const url = `https://api.climacell.co/v3/weather/forecast/hourly?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=now&end_time=${eightHrsFromNow}&fields=feels_like%2Ctemp%2Cprecipitation_probability%2Cprecipitation_type%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
+    const response = await axios.get(url);
+
+    return response.data;
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -101,6 +112,17 @@ async function getMtaStatus() {
     const response = await mta.status();
     return response.subway;
 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getWeatherNow() {
+  try {
+    const url = `https://api.climacell.co/v3/weather/realtime?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&fields=precipitation%2Ctemp%2Cfeels_like%2Chumidity%2Cwind_speed%2Cwind_direction%2Cwind_gust%2Cprecipitation_type%2Csunrise%2Csunset%2Cvisibility%2Ccloud_cover%2Cmoon_phase%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`;
+    const response = await axios.get(url);
+
+    return response.data;
   } catch (error) {
     console.log(error);
   }
