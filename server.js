@@ -76,6 +76,26 @@ app.get('/weatherDaily', (req, res) => {
   })
 })
 
+app.get('/stockIndices', (req, res) => {
+  getStockIndices().then(response => {
+    const processed = processStockIndices(response);
+    res.send(processed);
+  }).catch(error => {
+    console.log(error);
+  })
+})
+
+async function getStockIndices() {
+  try {
+    const url = `https://cloud.iexapis.com/stable/stock/market/batch?symbols=spy,dia,iwm&types=quote&range=1m&last=5&token=${process.env.IEX_PUBLIC_KEY}`
+    const response = await axios.get(url);
+
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 async function getWeatherDaily() {
   // figure out how to use params with axios
   try {
@@ -235,6 +255,22 @@ function processBusDistance(busDistance) {
   }
 
   return presentableDistance;
+}
+
+function processStockIndices(indices) {
+  const processedIndices = [];
+  
+  for (const symbol in indices) {
+    const processedIndex = {};
+
+    processedIndex.symbol = symbol;
+    processedIndex.latestPrice = indices[symbol]["quote"]["latestPrice"];
+    processedIndex.changePercent = indices[symbol]["quote"]["changePercent"] * 100;
+
+    processedIndices.push(processedIndex);
+  }
+
+  return processedIndices;
 }
 
 // listen on the port
