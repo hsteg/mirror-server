@@ -68,11 +68,33 @@ app.get('/weatherHourly', (req, res) => {
   })
 })
 
+app.get('/weatherDaily', (req, res) => {
+  getWeatherDaily().then(response => {
+    res.send(response);
+  }).catch(error => {
+    console.log(error);
+  })
+})
+
+async function getWeatherDaily() {
+  // figure out how to use params with axios
+  try {
+    const sevenDaysFromNow = moment().add(7, 'd').toISOString()
+    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=now&end_time=${sevenDaysFromNow}&fields=temp%2Cfeels_like%2Cprecipitation_probability%2Csunrise%2Csunset%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
+    const response = await axios.get(url);
+
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 async function getWeatherHourly() {
   try {
+    const oneHourFromNow = moment().add(1, 'h').toISOString();
     const eightHrsFromNow = moment().add(8, 'h').toISOString();
-    const url = `https://api.climacell.co/v3/weather/forecast/hourly?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=now&end_time=${eightHrsFromNow}&fields=feels_like%2Ctemp%2Cprecipitation_probability%2Cprecipitation_type%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
+    const url = `https://api.climacell.co/v3/weather/forecast/hourly?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=${oneHourFromNow}&end_time=${eightHrsFromNow}&fields=feels_like%2Ctemp%2Cprecipitation_probability%2Cprecipitation_type%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
     const response = await axios.get(url);
 
     return response.data;
