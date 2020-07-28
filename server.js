@@ -21,7 +21,8 @@ app.get('/transit', (req, res) => {
   const client = createClient(process.env.MTA_GTFS_KEY);
 
   client.departures(283).then((response) => {
-    res.send(response);
+    processed = processGreenpointAveTimes(response);
+    res.send(processed);
   });
 });
 
@@ -271,6 +272,33 @@ function processStockIndices(indices) {
   }
 
   return processedIndices;
+}
+
+function processGreenpointAveTimes(greenpointAveTimes) {
+  const departures = greenpointAveTimes.lines[0].departures;
+
+  const orderedFlattenedDepartures = departures.N.
+    concat(departures.S).
+      sort((a, b) => {
+        return a.time - b.time;
+      });
+  
+  const translatedStationNames = translateGreenpointAveDirections(orderedFlattenedDepartures);
+
+  return translatedStationNames.slice(0, 10);
+}
+
+function translateGreenpointAveDirections(departures) {
+  const translations = {
+    '281': 'Court Square',
+    '243': 'Church Ave'
+  }
+
+  for (let i = 0; i < departures.length; i++) {
+    departures[i].destinationStation = translations[departures[i].destinationStationId];
+  }
+
+  return departures;
 }
 
 // listen on the port
