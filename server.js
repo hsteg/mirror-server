@@ -46,8 +46,9 @@ app.get('/b62north', (req, res) => {
 
 app.get('/mtaStatus', (req, res) => {
   getMtaStatus().then(response => {
-    const processed = processSubwayStatuses(response);
-    res.send(processed);
+    // const processed = processSubwayStatuses(response);
+    // res.send(processed);
+    res.send(response);
   }).catch(error => {
     console.log(error);
   })
@@ -153,7 +154,8 @@ async function getMtaStatus() {
     });
 
     const response = await mta.status();
-    return response.subway;
+    const processed = processSubwayStatuses(response.subway);
+    return processed;
 
   } catch (error) {
     console.log(error);
