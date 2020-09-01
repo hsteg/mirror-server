@@ -153,8 +153,8 @@ async function getMtaStatus() {
       key: process.env.MTA_GTFS_KEY
     });
 
-    const response = await mta.status();
-    const processed = processSubwayStatuses(response.subway);
+    const response = await mta.status('subway');
+    const processed = processSubwayStatuses(response);
     return processed;
 
   } catch (error) {
