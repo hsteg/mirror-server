@@ -1,6 +1,9 @@
 {
   "name": "mirror-api",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.x"
+  },
   "description": "server for mirror",
   "main": "server.js",
   "scripts": {
