@@ -9,6 +9,10 @@ const { createClient } = require('mta-realtime-subway-departures');
 const Mta = require('mta-gtfs');
 const moment = require('moment'); 
 
+const CurrentWeather = require('./classes/weather/current');
+const DailyWeather = require('./classes/weather/daily');
+const HourlyWeather = require('./classes/weather/hourly');
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +59,9 @@ app.get('/mtaStatus', (req, res) => {
 })
 
 app.get('/weatherNow', (req, res) => {
-  getWeatherNow().then(response => {
+  const currentWeather = new CurrentWeather();
+
+  currentWeather.getWeather().then(response => {
     res.send(response);
   }).catch(error => {
     console.log(error);
@@ -63,7 +69,9 @@ app.get('/weatherNow', (req, res) => {
 })
 
 app.get('/weatherHourly', (req, res) => {
-  getWeatherHourly().then(response => {
+  const hourlyWeather = new HourlyWeather();
+
+  hourlyWeather.getWeather().then(response => {
     res.send(response);
   }).catch(error => {
     console.log(error);
@@ -71,7 +79,9 @@ app.get('/weatherHourly', (req, res) => {
 })
 
 app.get('/weatherDaily', (req, res) => {
-  getWeatherDaily().then(response => {
+  const dailyWeather = new DailyWeather();
+
+  dailyWeather.getWeather().then(response => {
     res.send(response);
   }).catch(error => {
     console.log(error);
@@ -90,33 +100,6 @@ app.get('/stockIndices', (req, res) => {
 async function getStockIndices() {
   try {
     const url = `https://cloud.iexapis.com/stable/stock/market/batch?symbols=spy,dia,iwm&types=quote&range=1m&last=5&token=${process.env.IEX_PUBLIC_KEY}`
-    const response = await axios.get(url);
-
-    return response.data;
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-async function getWeatherDaily() {
-  // figure out how to use params with axios
-  try {
-    const sevenDaysFromNow = moment().add(7, 'd').toISOString()
-    const url = `https://api.climacell.co/v3/weather/forecast/daily?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=now&end_time=${sevenDaysFromNow}&fields=temp%2Cfeels_like%2Cprecipitation_probability%2Csunrise%2Csunset%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
-    const response = await axios.get(url);
-
-    return response.data;
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-
-async function getWeatherHourly() {
-  try {
-    const oneHourFromNow = moment().add(1, 'h').toISOString();
-    const eightHrsFromNow = moment().add(8, 'h').toISOString();
-    const url = `https://api.climacell.co/v3/weather/forecast/hourly?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=${oneHourFromNow}&end_time=${eightHrsFromNow}&fields=feels_like%2Ctemp%2Cprecipitation_probability%2Cprecipitation_type%2Csunrise%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
     const response = await axios.get(url);
 
     return response.data;
@@ -157,17 +140,6 @@ async function getMtaStatus() {
     const processed = processSubwayStatuses(response);
     return processed;
 
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getWeatherNow() {
-  try {
-    const url = `https://api.climacell.co/v3/weather/realtime?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&fields=precipitation%2Ctemp%2Cfeels_like%2Chumidity%2Cwind_speed%2Cwind_direction%2Cwind_gust%2Cprecipitation_type%2Csunrise%2Csunset%2Cvisibility%2Ccloud_cover%2Cmoon_phase%2Cweather_code%2Cepa_health_concern&apikey=${process.env.CLIMACELL_KEY}`;
-    const response = await axios.get(url);
-
-    return response.data;
   } catch (error) {
     console.log(error);
   }
