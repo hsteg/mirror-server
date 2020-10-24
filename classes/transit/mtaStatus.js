@@ -3,6 +3,7 @@ const Mta = require('mta-gtfs');
 class MtaStatus {
   constructor() {
     this.mtaClient = new Mta({ key: process.env.MTA_GTFS_KEY });
+    this.externalMtaStatusLink = 'http://mta.info/status/subway/';
     this.subwayColors = {
       '123': '#EE352E',
       '456': '#00933C',
@@ -33,6 +34,7 @@ class MtaStatus {
       if (subwayStatus.name === 'SIR') return;
       const formattedStatus = {};
       formattedStatus.color = this.subwayColors[subwayStatus.name];
+      formattedStatus.externalStatusLink = `${this.externalMtaStatusLink}${subwayStatus.name}`
       formattedStatus.lines = subwayStatus.name.split('');
       formattedStatus.status = subwayStatus.status;
       formattedStatuses.push(formattedStatus);
