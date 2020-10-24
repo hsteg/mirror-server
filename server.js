@@ -55,7 +55,7 @@ app.get('/b62north', (req, res) => {
 
 app.get('/mtaStatus', (req, res) => {
   const mtaStatus = new MtaStatus();
-  
+
   mtaStatus.getStatus().then(response => {
     res.send(response);
   }).catch(error => {
@@ -79,7 +79,7 @@ app.get('/weatherHourly', (req, res) => {
   hourlyWeather.getWeather().then(response => {
     res.send(response);
   }).catch(error => {
-    console.log(error);
+    res.send(error);
   })
 })
 

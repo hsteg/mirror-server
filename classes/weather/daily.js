@@ -22,8 +22,10 @@ class DailyWeather extends Weather {
     const days = [];
     weatherData.forEach(el => {
       const formattedWeather = {
-        'airTemp': this.formattedAirTemp(el),
-        'realFeel': this.formattedRealFeel(el),
+        'airTempHigh': this.formattedAirTempHigh(el),
+        'airTempLow': this.formattedAirTempLow(el),
+        'realFeelHigh': this.formattedRealFeelHigh(el),
+        'realFeelLow': this.formattedRealFeelLow(el),
         'observationTime': this.formattedObservationTime(el),
         'precipitationProbability': this.formattedPrecipitationProbability(el),
         'weatherCode': this.formattedWeatherCode(el),
@@ -34,11 +36,21 @@ class DailyWeather extends Weather {
     return days;
   }
 
-  formattedRealFeel(weatherData) {
-    return weatherData.feels_like;
+  formattedRealFeelHigh(weatherData) {
+    const temp = weatherData.feels_like[1].max.value;
+    return this.formattedTemp(temp);
   }
-  formattedAirTemp(weatherData) {
-    return weatherData.temp;
+  formattedRealFeelLow(weatherData) {
+    const temp = weatherData.feels_like[0].min.value;
+    return this.formattedTemp(temp);
+  }
+  formattedAirTempHigh(weatherData) {
+    const temp = weatherData.temp[1].max.value;
+    return this.formattedTemp(temp);
+  }
+  formattedAirTempLow(weatherData) {
+    const temp = weatherData.temp[0].min.value;
+    return this.formattedTemp(temp);
   }
 }
 

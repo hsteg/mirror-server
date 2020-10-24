@@ -36,16 +36,6 @@ class HourlyWeather extends Weather {
 
     return hours;
   }
-
-  formattedRealFeel(weatherData) {
-    return weatherData.feels_like.value;
-  }
-  formattedAirTemp(weatherData) {
-    return weatherData.temp.value;
-  }
-  formattedSunrise(weatherData) {
-    return weatherData.sunrise.value;
-  }
 }
 
 module.exports = HourlyWeather;
