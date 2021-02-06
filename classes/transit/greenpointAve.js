@@ -7,7 +7,8 @@ class GreenpointAve {
     this.stationId = 283;
     this.stationTranslations = {
       '281': 'Court Square',
-      '243': 'Church Ave'
+      '243': 'Church Ave',
+      '-1': 'N/A'
     }
   }
 
@@ -24,7 +25,7 @@ class GreenpointAve {
     const departures = trainTimes.lines[0].departures;
     const orderedDepartures = this.sortTrainTimes(departures);
     const translatedOrderedDepartures = this.translateDestinationStation(orderedDepartures);
-
+    
     return translatedOrderedDepartures.slice(0, 10);
   }
 
@@ -40,7 +41,11 @@ class GreenpointAve {
 
   translateDestinationStation(departures) {
     for (let i = 0; i < departures.length; i++) {
-      departures[i].destinationStation = this.stationTranslations[departures[i].destinationStationId];
+      if (departures[i].destinationStationId) {
+        departures[i].destinationStation = this.stationTranslations[departures[i].destinationStationId];
+      } else {
+        departures[i].destinationStation = this.stationTranslations['-1'];
+      }
     }
 
     return departures;
