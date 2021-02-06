@@ -25,7 +25,7 @@
     "gtfs-realtime-bindings": "0.0.5",
     "moment": "^2.27.0",
     "mta-gtfs": "^1.1.0",
-    "mta-realtime-subway-departures": "^1.0.0",
+    "mta-realtime-subway-departures": "^1.1.1",
     "nodemon": "^1.19.4",
     "request": "^2.88.2"
   }
