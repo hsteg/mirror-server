@@ -18,7 +18,7 @@ class HourlyWeather extends WeatherBase {
         'precipitationProbability': this.formattedRoundedPercent(el.values.precipitationProbability),
         'precipitationType': this.formattedPrecipitationType(el.values.precipitationType),
         'weatherCode': this.formattedWeatherCode(el.values.weatherCode),
-        'sunrise': this.formattedSunrise(el.values.sunrise)
+        'sunrise': this.formattedSunrise(el.values.sunriseTime)
       };
       hours.push(formattedWeather);
     })

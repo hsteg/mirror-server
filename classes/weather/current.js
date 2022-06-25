@@ -13,6 +13,7 @@ class CurrentWeather extends WeatherBase {
       'airTemp': this.formattedTemp(data.temperature),
       'realFeel': this.formattedTemp(data.temperatureApparent),
       'cloudCover': this.formattedRoundedPercent(data.cloudCover),
+      'epaHealthConcern': this.formattedEpaHealthConcern(data.epaHealthConcern),
       'humidity': this.formattedRoundedPercent(data.humidity),
       'moonPhase': this.formattedMoonPhase(data.moonPhase),
       'precipitationAmount': this.formattedPrecipitationAmount(data.precipitationIntensity),
@@ -22,7 +23,6 @@ class CurrentWeather extends WeatherBase {
       'windGust': this.formattedRoundedMph(data.windGust),
       'windSpeed': this.formattedRoundedMph(data.windSpeed),
       'windDirection': this.formattedWindDirection(data.windDirection),
-      // 'airQuality': this.formattedAirQuality(data.),
       'weatherCode': this.formattedWeatherCode(data.weatherCode),
       'observationTime': this.formattedObservationTime(data.startTime),
 
@@ -47,6 +47,17 @@ class CurrentWeather extends WeatherBase {
       7: "Waning Crescent"
     }
     return moonPhases[moonPhase];
+  }
+  formattedEpaHealthConcern(epaHealthConcern) {
+    const healthConcerns = {
+      0: "Good",
+      1: "Moderate",
+      2: "Unhealthy for Sensitive Groups",
+      3: "Unhealthy",
+      4: "Very Unhealthy",
+      5: "Hazardous"
+    }
+    return healthConcerns[epaHealthConcern];
   }
   formattedPrecipitationAmount(precipitationIntensity) {
     return `${precipitationIntensity} in/hr`;
