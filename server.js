@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/transit', (req, res) => {
   const greenpointAve = new GreenpointAve();
-  
+
   greenpointAve.getTransit().then(response => {
     res.send(response);
   }).catch(error => {
@@ -116,7 +116,7 @@ async function getStockIndices() {
 
 function processStockIndices(indices) {
   const processedIndices = [];
-  
+
   for (const symbol in indices) {
     const processedIndex = {};
 

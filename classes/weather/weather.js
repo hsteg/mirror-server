@@ -8,7 +8,7 @@ class Weather {
   }
   formattedPrecipitationProbability(weatherData) {
     return `${Math.round(weatherData.precipitation_probability.value)}%`;
-  }  
+  }
   formattedPrecipitationType(weatherData) {
     return weatherData.precipitation_type.value;
   }

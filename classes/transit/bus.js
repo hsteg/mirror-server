@@ -17,7 +17,7 @@ class BusTime {
 
   processBusTimes(busTimes) {
     const formattedTimes = [];
-    
+
     busTimes.forEach(busData => {
       let newBusData = {};
       const distanceInfo = busData.MonitoredVehicleJourney.MonitoredCall.Extensions.Distances;

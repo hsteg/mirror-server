@@ -25,7 +25,7 @@ class GreenpointAve {
     const departures = trainTimes.lines[0].departures;
     const orderedDepartures = this.sortTrainTimes(departures);
     const translatedOrderedDepartures = this.translateDestinationStation(orderedDepartures);
-    
+
     return translatedOrderedDepartures.slice(0, 10);
   }
 
@@ -35,7 +35,7 @@ class GreenpointAve {
         sort((a, b) => {
           return a.time - b.time;
         });
-    
+
     return orderedFlattenedDepartures;
   }
 
