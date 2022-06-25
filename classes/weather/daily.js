@@ -7,7 +7,7 @@ class DailyWeather extends WeatherBase {
   }
 
   formatWeather() {
-    const data = this.weatherData.intervals.slice(0, 7);
+    const data = this.weatherData.intervals.slice(0, 9);
     const days = [];
 
     data.forEach(el => {
