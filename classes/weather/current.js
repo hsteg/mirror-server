@@ -1,8 +1,8 @@
-// const Weather = require('./weather');
+const WeatherBase = require('./weatherBase');
 
-class CurrentWeather {
+class CurrentWeather extends WeatherBase {
   constructor(weatherData) {
-    // super();
+    super();
     this.weatherData = weatherData;
   }
 
@@ -35,13 +35,6 @@ class CurrentWeather {
     return formattedWeather;
   }
 
-  formattedTemp(temp) {
-    return `${Math.round(temp)}°`;
-  }
-
-  formattedRoundedPercent(num) {
-    return `${Math.round(num)}%`;
-  }
   formattedMoonPhase(moonPhase) {
     // this gonna need work
     // translations to moonphase
@@ -52,26 +45,9 @@ class CurrentWeather {
     // maybe add units/hr?
     return precipitationIntensity;
   }
-  formattedPrecipitationType(precipitationType) {
-    // this gonna need some work
-    // translations to precip type?
-    return precipitationType;
-  }
-  formattedSunrise(sunriseTime) {
-    // change this to readable EST
-    return sunriseTime;
-  }
   formattedSunset(sunsetTime) {
     // change this to readable EST
     return sunsetTime;
-  }
-  formattedWeatherCode(weatherCode) {
-    // not sure we need this
-    return weatherCode;
-  }
-  formattedObservationTime(observationTime) {
-    // not sure we need this
-    return observationTime;
   }
   formattedWindGust(windGust) {
     // format this

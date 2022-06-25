@@ -1,7 +1,8 @@
-// const Weather = require('./weather');
+const WeatherBase = require('./weatherBase');
 
-class HourlyWeather {
+class HourlyWeather extends WeatherBase {
   constructor(weatherData) {
+    super();
     this.weatherData = weatherData;
   }
 
@@ -23,30 +24,6 @@ class HourlyWeather {
     })
 
     return hours;
-  }
-
-  formattedTemp(temp) {
-    return `${Math.round(temp)}°`;
-  }
-  formattedRoundedPercent(num) {
-    return `${Math.round(num)}%`;
-  }
-  formattedPrecipitationType(precipitationType) {
-    // this gonna need some work
-    // translations to precip type?
-    return precipitationType;
-  }
-  formattedWeatherCode(weatherCode) {
-    // not sure we need this
-    return weatherCode;
-  }
-  formattedSunrise(sunriseTime) {
-    // change this to readable EST
-    return sunriseTime;
-  }
-  formattedObservationTime(observationTime) {
-    // not sure we need this
-    return observationTime;
   }
 }
 

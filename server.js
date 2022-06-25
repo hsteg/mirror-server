@@ -9,7 +9,7 @@ const axios = require('axios');
 const GreenpointAve = require('./classes/transit/greenpointAve');
 const MtaStatus = require('./classes/transit/mtaStatus');
 const BusTime = require('./classes/transit/bus');
-const Weather = require('./classes/weather/weather');
+const AllWeather = require('./classes/weather/all');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -62,7 +62,7 @@ app.get('/mtaStatus', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-  const weather = new Weather();
+  const weather = new AllWeather();
 
   weather.getWeather().then(response => {
     res.send(response);

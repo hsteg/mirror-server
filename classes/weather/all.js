@@ -3,7 +3,8 @@ const CurrentWeather = require('./current');
 const HourlyWeather = require('./hourly');
 const DailyWeather = require('./daily');
 
-class Weather {
+
+class AllWeather {
   constructor() {
     this.apiUrl = `https://api.tomorrow.io/v4/timelines?location=${process.env.MY_LAT},${process.env.MY_LONG}&fields=temperature,temperatureMax,temperatureMin,temperatureApparent,temperatureApparentMax,temperatureApparentMin,cloudCover,humidity,moonPhase,precipitationIntensity,precipitationType,windGust,windSpeed,windDirection,weatherCode,precipitationProbability,sunriseTime,sunsetTime,uvIndex,uvIndexMax&timesteps=current,1h,1d&units=imperial&apikey=${process.env.CLIMACELL_KEY}`;
   }
@@ -35,4 +36,4 @@ class Weather {
   }
 }
 
-module.exports = Weather;
+module.exports = AllWeather;
