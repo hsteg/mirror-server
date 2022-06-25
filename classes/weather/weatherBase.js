@@ -20,6 +20,9 @@ class WeatherBase {
   formattedSunrise(sunriseTime) {
     return sunriseTime;
   }
+  formattedSunset(sunsetTime) {
+    return sunsetTime;
+  }
   formattedPrecipitationType(precipitationType) {
     const precipTypes = {
       0: "None",

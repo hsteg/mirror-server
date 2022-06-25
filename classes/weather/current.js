@@ -16,6 +16,7 @@ class CurrentWeather extends WeatherBase {
       'epaHealthConcern': this.formattedEpaHealthConcern(data.epaHealthConcern),
       'humidity': this.formattedRoundedPercent(data.humidity),
       'moonPhase': this.formattedMoonPhase(data.moonPhase),
+      'observationTime': this.formattedObservationTime(this.weatherData.intervals[0].startTime),
       'precipitationAmount': this.formattedPrecipitationAmount(data.precipitationIntensity),
       'precipitationType': this.formattedPrecipitationType(data.precipitationType),
       'sunrise': this.formattedSunrise(data.sunriseTime),
@@ -23,8 +24,7 @@ class CurrentWeather extends WeatherBase {
       'windGust': this.formattedRoundedMph(data.windGust),
       'windSpeed': this.formattedRoundedMph(data.windSpeed),
       'windDirection': this.formattedWindDirection(data.windDirection),
-      'weatherCode': this.formattedWeatherCode(data.weatherCode),
-      'observationTime': this.formattedObservationTime(data.startTime),
+      'weatherCode': this.formattedWeatherCode(data.weatherCode)
 
       // uvIndex, uvIndexMax
       // precipitationProbability is new
@@ -61,9 +61,6 @@ class CurrentWeather extends WeatherBase {
   }
   formattedPrecipitationAmount(precipitationIntensity) {
     return `${precipitationIntensity} in/hr`;
-  }
-  formattedSunset(sunsetTime) {
-    return sunsetTime;
   }
   formattedRoundedMph(mph) {
     return `${Math.round(mph)} mph`;

@@ -7,7 +7,7 @@ class HourlyWeather extends WeatherBase {
   }
 
   formatWeather() {
-    const data = this.weatherData.intervals.slice(0, 8);
+    const data = this.weatherData.intervals.slice(0, 10);
     const hours = [];
 
     data.forEach(el => {
@@ -18,7 +18,8 @@ class HourlyWeather extends WeatherBase {
         'precipitationProbability': this.formattedRoundedPercent(el.values.precipitationProbability),
         'precipitationType': this.formattedPrecipitationType(el.values.precipitationType),
         'weatherCode': this.formattedWeatherCode(el.values.weatherCode),
-        'sunrise': this.formattedSunrise(el.values.sunriseTime)
+        'sunrise': this.formattedSunrise(el.values.sunriseTime),
+        'sunset': this.formattedSunset(el.values.sunsetTime)
       };
       hours.push(formattedWeather);
     })
