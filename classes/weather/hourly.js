@@ -1,40 +1,52 @@
-const { default: Axios } = require("axios");
-const moment = require('moment');
-const Weather = require('./weather');
+// const Weather = require('./weather');
 
-class HourlyWeather extends Weather {
-  constructor() {
-    super();
-    this.oneHourFromNow = moment().add(1, 'h').toISOString();
-    this.eightHrsFromNow = moment().add(8, 'h').toISOString();
-    this.apiUrl = `https://api.climacell.co/v3/weather/forecast/hourly?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=${this.oneHourFromNow}&end_time=${this.eightHrsFromNow}&fields=feels_like%2Ctemp%2Cprecipitation_probability%2Cprecipitation_type%2Csunrise%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`
+class HourlyWeather {
+  constructor(weatherData) {
+    this.weatherData = weatherData;
   }
 
-  async getWeather() {
-    try {
-      const response = await Axios.get(this.apiUrl);
-      return this.formatWeather(response.data);
-    } catch (error) {
-      return error;
-    }
-  }
-
-  formatWeather(weatherData) {
+  formatWeather() {
+    const data = this.weatherData.intervals.slice(0, 8);
     const hours = [];
-    weatherData.forEach(el => {
+
+    data.forEach(el => {
       const formattedWeather = {
-        'observationTime': this.formattedObservationTime(el),
-        'realFeel': this.formattedRealFeel(el),
-        'airTemp': this.formattedAirTemp(el),
-        'precipitationProbability': this.formattedPrecipitationProbability(el),
-        'precipitationType': this.formattedPrecipitationType(el),
-        'weatherCode': this.formattedWeatherCode(el),
-        'sunrise': this.formattedSunrise(el)
+        'observationTime': this.formattedObservationTime(el.startTime),
+        'realFeel': this.formattedTemp(el.values.temperatureApparent),
+        'airTemp': this.formattedTemp(el.values.temperature),
+        'precipitationProbability': this.formattedRoundedPercent(el.values.precipitationProbability),
+        'precipitationType': this.formattedPrecipitationType(el.values.precipitationType),
+        'weatherCode': this.formattedWeatherCode(el.values.weatherCode),
+        'sunrise': this.formattedSunrise(el.values.sunrise)
       };
       hours.push(formattedWeather);
     })
 
     return hours;
+  }
+
+  formattedTemp(temp) {
+    return `${Math.round(temp)}°`;
+  }
+  formattedRoundedPercent(num) {
+    return `${Math.round(num)}%`;
+  }
+  formattedPrecipitationType(precipitationType) {
+    // this gonna need some work
+    // translations to precip type?
+    return precipitationType;
+  }
+  formattedWeatherCode(weatherCode) {
+    // not sure we need this
+    return weatherCode;
+  }
+  formattedSunrise(sunriseTime) {
+    // change this to readable EST
+    return sunriseTime;
+  }
+  formattedObservationTime(observationTime) {
+    // not sure we need this
+    return observationTime;
   }
 }
 

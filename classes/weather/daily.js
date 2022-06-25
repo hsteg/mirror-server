@@ -1,34 +1,24 @@
-const { default: Axios } = require("axios");
-const moment = require('moment');
-const Weather = require('./weather');
+// const Weather = require('./weather');
 
-class DailyWeather extends Weather {
-  constructor() {
-    super();
-    this.sevenHoursFromNow = moment().add(7, 'd').toISOString();
-    this.apiUrl = `https://api.climacell.co/v3/weather/forecast/daily?lat=${process.env.MY_LAT}&lon=${process.env.MY_LONG}&unit_system=us&start_time=now&end_time=${this.sevenHoursFromNow}&fields=temp%2Cfeels_like%2Cprecipitation_probability%2Csunrise%2Csunset%2Cweather_code&apikey=${process.env.CLIMACELL_KEY}`;
+class DailyWeather {
+  constructor(weatherData) {
+    // super();
+    this.weatherData = weatherData;
   }
 
-  async getWeather() {
-    try {
-      const response = await Axios.get(this.apiUrl);
-      return this.formatWeather(response.data)
-    } catch (error) {
-      return error;
-    }
-  }
-
-  formatWeather(weatherData) {
+  formatWeather() {
+    const data = this.weatherData.intervals.slice(0, 7);
     const days = [];
-    weatherData.forEach(el => {
+
+    data.forEach(el => {
       const formattedWeather = {
-        'airTempHigh': this.formattedAirTempHigh(el),
-        'airTempLow': this.formattedAirTempLow(el),
-        'realFeelHigh': this.formattedRealFeelHigh(el),
-        'realFeelLow': this.formattedRealFeelLow(el),
-        'observationTime': this.formattedObservationTime(el),
-        'precipitationProbability': this.formattedPrecipitationProbability(el),
-        'weatherCode': this.formattedWeatherCode(el),
+        'airTempHigh': this.formattedTemp(el.values.temperatureMax),
+        'airTempLow': this.formattedTemp(el.values.temperatureMin),
+        'realFeelHigh': this.formattedTemp(el.values.temperatureApparentMax),
+        'realFeelLow': this.formattedTemp(el.values.temperatureApparentMin),
+        'observationTime': this.formattedObservationTime(el.startTime),
+        'precipitationProbability': this.formattedRoundedPercent(el.values.precipitationProbability),
+        'weatherCode': this.formattedWeatherCode(el.values.weatherCode),
       };
 
       days.push(formattedWeather);
@@ -36,21 +26,19 @@ class DailyWeather extends Weather {
     return days;
   }
 
-  formattedRealFeelHigh(weatherData) {
-    const temp = weatherData.feels_like[1].max.value;
-    return this.formattedTemp(temp);
+  formattedTemp(temp) {
+    return `${Math.round(temp)}°`;
   }
-  formattedRealFeelLow(weatherData) {
-    const temp = weatherData.feels_like[0].min.value;
-    return this.formattedTemp(temp);
+  formattedRoundedPercent(num) {
+    return `${Math.round(num)}%`;
   }
-  formattedAirTempHigh(weatherData) {
-    const temp = weatherData.temp[1].max.value;
-    return this.formattedTemp(temp);
+  formattedObservationTime(observationTime) {
+    // not sure we need this
+    return observationTime;
   }
-  formattedAirTempLow(weatherData) {
-    const temp = weatherData.temp[0].min.value;
-    return this.formattedTemp(temp);
+  formattedWeatherCode(weatherCode) {
+    // not sure we need this
+    return weatherCode;
   }
 }
 

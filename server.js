@@ -3,16 +3,13 @@ require('dotenv').config()
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-// const port = process.env.PORT;
-const port = 8000;
+const port = process.env.PORT;
 const axios = require('axios');
 
-const CurrentWeather = require('./classes/weather/current');
-const DailyWeather = require('./classes/weather/daily');
-const HourlyWeather = require('./classes/weather/hourly');
 const GreenpointAve = require('./classes/transit/greenpointAve');
 const MtaStatus = require('./classes/transit/mtaStatus');
 const BusTime = require('./classes/transit/bus');
+const Weather = require('./classes/weather/weather');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -64,33 +61,13 @@ app.get('/mtaStatus', (req, res) => {
   });
 })
 
-app.get('/weatherNow', (req, res) => {
-  const currentWeather = new CurrentWeather();
+app.get('/weather', (req, res) => {
+  const weather = new Weather();
 
-  currentWeather.getWeather().then(response => {
-    res.send(response);
-  }).catch(error => {
-    console.log(error);
-  })
-})
-
-app.get('/weatherHourly', (req, res) => {
-  const hourlyWeather = new HourlyWeather();
-
-  hourlyWeather.getWeather().then(response => {
+  weather.getWeather().then(response => {
     res.send(response);
   }).catch(error => {
     res.send(error);
-  })
-})
-
-app.get('/weatherDaily', (req, res) => {
-  const dailyWeather = new DailyWeather();
-
-  dailyWeather.getWeather().then(response => {
-    res.send(response);
-  }).catch(error => {
-    console.log(error);
   })
 })
 
