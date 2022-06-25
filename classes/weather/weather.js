@@ -20,7 +20,8 @@ class Weather {
     return this.formattedTemp(temp);
   }
   formattedAirTemp(weatherData) {
-    const temp = weatherData.temp.value;
+    // const temp = weatherData.temp.value;
+    const temp = weatherData.data.timelines[0].intervals[0].values.temperature;
     return this.formattedTemp(temp);
   }
   formattedSunrise(weatherData) {

@@ -3,7 +3,8 @@ require('dotenv').config()
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const port = process.env.PORT;
+// const port = process.env.PORT;
+const port = 8000;
 const axios = require('axios');
 
 const CurrentWeather = require('./classes/weather/current');
