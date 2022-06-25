@@ -19,8 +19,8 @@ class CurrentWeather extends WeatherBase {
       'precipitationType': this.formattedPrecipitationType(data.precipitationType),
       'sunrise': this.formattedSunrise(data.sunriseTime),
       'sunset': this.formattedSunset(data.sunsetTime),
-      'windGust': this.formattedWindGust(data.windGust),
-      'windSpeed': this.formattedWindSpeed(data.windSpeed),
+      'windGust': this.formattedRoundedMph(data.windGust),
+      'windSpeed': this.formattedRoundedMph(data.windSpeed),
       'windDirection': this.formattedWindDirection(data.windDirection),
       // 'airQuality': this.formattedAirQuality(data.),
       'weatherCode': this.formattedWeatherCode(data.weatherCode),
@@ -36,38 +36,28 @@ class CurrentWeather extends WeatherBase {
   }
 
   formattedMoonPhase(moonPhase) {
-    // this gonna need work
-    // translations to moonphase
-    return moonPhase;
+    const moonPhases = {
+      0: "New",
+      1: "Waxing Crescent",
+      2: "First Quarter",
+      3: "Waxing Gibbous",
+      4: "Full",
+      5: "Waning Gibbous",
+      6: "Third Quarter",
+      7: "Waning Crescent"
+    }
+    return moonPhases[moonPhase];
   }
   formattedPrecipitationAmount(precipitationIntensity) {
-    // this gonna need some work
-    // maybe add units/hr?
-    return precipitationIntensity;
+    return `${precipitationIntensity} in/hr`;
   }
   formattedSunset(sunsetTime) {
-    // change this to readable EST
     return sunsetTime;
   }
-  formattedWindGust(windGust) {
-    // format this
-    // is it mph? knots?
-    return windGust;
+  formattedRoundedMph(mph) {
+    return `${Math.round(mph)} mph`;
   }
-  formattedWindSpeed(windSpeed) {
-    // format this
-    // mph, knots?
-    return windSpeed;
-  }
-  formattedWindDirection(windDirection) {
-  // const directionInDegrees = weatherData.wind_direction.value;
-  // const cardinalDirection = this.cardinalWindDirection(directionInDegrees);
-  // return cardinalDirection;
-
-  // honeslty probably the same as it was, j ust returning the number for now
-    return windDirection;
-  }
-  cardinalWindDirection(directionInDegrees) {
+  formattedWindDirection(directionInDegrees) {
     let cardinalDirection;
 
     if (directionInDegrees > 0 && directionInDegrees <= 22.5) {

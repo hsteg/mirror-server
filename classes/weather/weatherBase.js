@@ -18,13 +18,17 @@ class WeatherBase {
     return weatherCode;
   }
   formattedSunrise(sunriseTime) {
-    // change this to readable EST
     return sunriseTime;
   }
   formattedPrecipitationType(precipitationType) {
-    // this gonna need some work
-    // translations to precip type?
-    return precipitationType;
+    const precipTypes = {
+      0: "None",
+      1: "Rain",
+      2: "Snow",
+      3: "Freezing Rain",
+      4: "Ice Pellets / Sleet"
+    }
+    return precipTypes[precipitationType];
   }
 }
 
