@@ -19,6 +19,16 @@ app.get('/', (req, res) => {
   res.send(`Hi! Server is listening on port ${port}`);
 });
 
+app.get('/led-sign-transit', (req, res) => {
+  const greenpointAve = new GreenpointAve();
+
+  greenpointAve.getTransit('led').then(response => {
+    res.send(response);
+  }).catch(error => {
+    console.log(error);
+  })
+});
+
 app.get('/transit', (req, res) => {
   const greenpointAve = new GreenpointAve();
 

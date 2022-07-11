@@ -12,10 +12,14 @@ class GreenpointAve {
     }
   }
 
-  async getTransit() {
+  async getTransit(ledSign = false) {
     try {
       const departures = await this.client.departures(this.stationId);
-      return this.processTrainTimes(departures);
+      if (ledSign) {
+        return this.processLedTrainTimes(departures);
+      } else {
+        return this.processTrainTimes(departures);
+      }
     } catch (error) {
       return error;
     }
@@ -27,6 +31,14 @@ class GreenpointAve {
     const translatedOrderedDepartures = this.translateDestinationStation(orderedDepartures);
 
     return translatedOrderedDepartures.slice(0, 10);
+  }
+
+  processLedTrainTimes(trainTimes) {
+    const departures = trainTimes.lines[0].departures;
+    return {
+      n: departures["N"].slice(0,2),
+      s: departures["S"].slice(0,2)
+    };
   }
 
   sortTrainTimes(departures) {
