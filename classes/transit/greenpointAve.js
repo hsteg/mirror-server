@@ -16,9 +16,9 @@ class GreenpointAve {
     try {
       const departures = await this.client.departures(this.stationId);
       if (ledSign) {
-        return this.processLedTrainTimes(departures);
+        return this.processLedTrainTimes(departures.lines[0].departures);
       } else {
-        return this.processTrainTimes(departures);
+        return this.processTrainTimes(departures.lines[0].departures);
       }
     } catch (error) {
       return error;
@@ -26,19 +26,20 @@ class GreenpointAve {
   }
 
   processTrainTimes(trainTimes) {
-    const departures = trainTimes.lines[0].departures;
-    const orderedDepartures = this.sortTrainTimes(departures);
-    const translatedOrderedDepartures = this.translateDestinationStation(orderedDepartures);
+    const orderedDepartures = this.sortTrainTimes(trainTimes);
 
-    return translatedOrderedDepartures.slice(0, 10);
+    return this.translateDestinationStationAndTime(orderedDepartures).slice(0, 10);
   }
 
   processLedTrainTimes(trainTimes) {
-    const departures = trainTimes.lines[0].departures;
     return {
-      n: departures["N"].slice(0,2),
-      s: departures["S"].slice(0,2)
+      n: this.formatTrainsForLed(trainTimes["N"].slice(0, 2)),
+      s: this.formatTrainsForLed(trainTimes["S"].slice(0, 2))
     };
+  }
+
+  formatTrainsForLed(departures) {
+    return departures.map(departure => this.timeDifferenceInMin(departure.time));
   }
 
   sortTrainTimes(departures) {
@@ -51,16 +52,24 @@ class GreenpointAve {
     return orderedFlattenedDepartures;
   }
 
-  translateDestinationStation(departures) {
+  translateDestinationStationAndTime(departures) {
     for (let i = 0; i < departures.length; i++) {
       if (departures[i].destinationStationId) {
         departures[i].destinationStation = this.stationTranslations[departures[i].destinationStationId];
       } else {
         departures[i].destinationStation = this.stationTranslations['-1'];
       }
+      departures[i].readableTime = this.timeDifferenceInMin(departures[i].time);
     }
 
     return departures;
+  }
+
+  timeDifferenceInMin(departure) {
+    const nowTime = new Date(Date.now()).getTime();
+    const departureTime = new Date(departure * 1000).getTime();
+    const difference = (((departureTime - nowTime) / 1000) / 60);
+    return Math.round(difference);
   }
 }
 
