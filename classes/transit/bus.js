@@ -6,12 +6,27 @@ class BusTime {
     this.apiUrl = `http://bustime.mta.info/api/siri/stop-monitoring.json?key=${process.env.MTA_BUS_KEY}&OperatorRef=MTA&MonitoringRef=${this.stopId}&LineRef=MTA%20NYCT_B62&MaximumStopVisits=3`;
   }
 
-  async getBusTime() {
+  async getBusTime(ledSign = false) {
     try {
       const response = await Axios.get(this.apiUrl);
-      return this.processBusTimes(response.data.Siri.ServiceDelivery.StopMonitoringDelivery[0].MonitoredStopVisit);
+
+      if (ledSign) {
+        return this.processLedBusTimes(response.data.Siri.ServiceDelivery.StopMonitoringDelivery[0].MonitoredStopVisit);
+      } else {
+        return this.processBusTimes(response.data.Siri.ServiceDelivery.StopMonitoringDelivery[0].MonitoredStopVisit);
+      }
     } catch (error) {
       return error;
+    }
+  }
+
+  processLedBusTimes(busTimes) {
+    if (busTimes) {
+      return busTimes.map(busData => {
+        return this.timeDifferenceInMin(busData.MonitoredVehicleJourney.MonitoredCall.ExpectedArrivalTime || busData.MonitoredVehicleJourney.MonitoredCall.AimedArrivalTime)
+      }).sort((a, b) => a - b )
+    } else {
+      return [];
     }
   }
 
@@ -59,6 +74,13 @@ class BusTime {
     }
 
     return presentableDistance;
+  }
+
+  timeDifferenceInMin(departure) {
+    const nowTime = new Date(Date.now()).getTime();
+    const departureTime = new Date(departure).getTime();
+    const difference = (((departureTime - nowTime) / 1000) / 60);
+    return Math.round(difference);
   }
 }
 

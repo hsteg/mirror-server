@@ -10,6 +10,7 @@ const GreenpointAve = require('./classes/transit/greenpointAve');
 const MtaStatus = require('./classes/transit/mtaStatus');
 const BusTime = require('./classes/transit/bus');
 const AllWeather = require('./classes/weather/all');
+const BusAndTrain = require('./classes/transit/busAndTrain');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -20,9 +21,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/led-sign-transit', (req, res) => {
-  const greenpointAve = new GreenpointAve();
+  const transit = new BusAndTrain();
 
-  greenpointAve.getTransit('led').then(response => {
+  transit.getTransit().then(response => {
     res.send(response);
   }).catch(error => {
     console.log(error);
