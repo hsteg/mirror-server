@@ -16,7 +16,7 @@ class GreenpointAve {
     try {
       const departures = await this.client.departures(this.stationId);
       if (ledSign) {
-        return this.processLedTrainTimes(departures.lines[0].departures);
+        return departures.lines.length > 0 ? this.processLedTrainTimes(departures.lines[0].departures) : [];
       } else {
         return this.processTrainTimes(departures.lines[0].departures);
       }
